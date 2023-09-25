@@ -73,3 +73,10 @@ do{
     }
 }
 while (total > 78);
+
+function personaje() {
+    let esp = (" ")
+    console.log ("Datos de personaje: " + raza + esp + clase + esp + total);
+}
+
+personaje()
