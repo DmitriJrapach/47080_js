@@ -1,12 +1,5 @@
-class InterfazUsuario {
-  static obtenerEntrada(mensaje) {
-      return prompt(mensaje);
-  }
 
-  static mostrarMensaje(mensaje) {
-      alert(mensaje);
-  }
-}
+
 
 class Personaje {
   constructor(raza, claseJuego, fuerza, destreza, constitucion, sabiduria, inteligencia, carisma, velocidad, vision, aptitudes) {
@@ -69,7 +62,7 @@ class Personaje {
     return `Habilidades: ${this.habilidades.join(", ")}`;
   }
 }
-
+// Agregamos equipo inicial y habilidades claseas
 const ClaseJuego = {
   dadoVidaMaximo: {
       barbaro: 12,
@@ -122,37 +115,49 @@ const ClaseJuego = {
 //  Solicita al usuario ingresar su raza y clase de personaje y devuelve estos valores en un array.
 
 function obtenerRazaClase() {
-  const razaClase = InterfazUsuario.obtenerEntrada('Ingrese raza y clase (ejem: elfo explorador)');
-  return razaClase.toLowerCase().split(' ').map(limpiarYNormalizar);
+  const raza = limpiarYNormalizar(document.getElementById('raza').value);
+  const claseJuego = limpiarYNormalizar(document.getElementById('claseJuego').value);
+
+  return [raza, claseJuego];
 }
-
-// Solicita al usuario ingresar sus características y asegura que cumplan con ciertas restricciones.
-
+// Obtenemos las tiradas de caracteristicas
 function obtenerCaracteristicas() {
-  let caracteristicas = [];
-  let suma_caracteristicas = 0;
+  const fuerza = Number(document.getElementById('fuerza').value);
+  const destreza = Number(document.getElementById('destreza').value);
+  const constitucion = Number(document.getElementById('constitucion').value);
+  const inteligencia = Number(document.getElementById('inteligencia').value);
+  const sabiduria = Number(document.getElementById('sabiduria').value);
+  const carisma = Number(document.getElementById('carisma').value);
 
-  while (caracteristicas.length !== 6 || suma_caracteristicas > 78) {
-      caracteristicas = InterfazUsuario.obtenerEntrada('Ingrese sus tiradas de caracteristicas, separadas por espacio en el siguiente orden: Fuerza, Destreza, Constitucion, Sabiduria, Inteligencia, Carisma. Cada una de las caracteristicas no puede ser menor a 8 y mayor a 18 y el total no puede superar 78 puntos (ejem: 18 16 14 12 10 8)').split(' ').map(Number);
-      
-      if (caracteristicas.length === 6) {
-          suma_caracteristicas = caracteristicas.reduce((total, stat) => total + stat, 0);
-          
-          if (suma_caracteristicas > 78) {
-              InterfazUsuario.mostrarMensaje("La suma total de las características no puede exceder los 78 puntos.");
-          }
-          
-          for (let i = 0; i < caracteristicas.length; i++) {
-              if (caracteristicas[i] < 8 || caracteristicas[i] > 18) {
-                  InterfazUsuario.mostrarMensaje(`La característica #${i+1} está fuera de rango. Debe estar entre 8 y 18.`);
-              }
-          }
-      } else {
-          InterfazUsuario.mostrarMensaje("Debes ingresar exactamente 6 valores para las características.");
+  const caracteristicas = [fuerza, destreza, constitucion, inteligencia, sabiduria, carisma];
+
+  let suma_caracteristicas = caracteristicas.reduce((total, stat) => total + stat, 0);
+
+ 
+  if (suma_caracteristicas > 78) {
+    Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'La suma de los puntos no debe exceder 78!',
+    });
+    return false;
+  }
+
+
+  for (let i = 0; i < caracteristicas.length; i++) {
+      if (caracteristicas[i] < 8 || caracteristicas[i] > 18) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error en Característica',
+          text: `La característica #${i+1} está fuera de rango. Debe estar entre 8 y 18.`,
+      });
+        return false;
       }
   }
+
   return caracteristicas;
 }
+
 // Función auxiliar para limpiar y normalizar strings.
 function limpiarYNormalizar(str) {
   let resultado = str.trim(); 
@@ -197,6 +202,10 @@ function crearNuevoPersonaje() {
   }
 
   const caracteristicas = obtenerCaracteristicas();
+  if (!caracteristicas) {
+
+    return null;
+}
   const resultado = aplicarModificadoresRaza(caracteristicas, raza);
   const personaje = new Personaje(raza, claseJuego, ...resultado.caracteristicas, resultado.velocidad, resultado.vision, resultado.aptitudes);
   personaje.establecerHPInicial();
@@ -248,116 +257,107 @@ function aplicarModificadoresRaza(caracteristicas, raza) {
   };
            
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-  const botonCrear = document.getElementById('crearPersonaje');
-  const info = document.getElementById('infoPersonaje');
-
-  botonCrear.addEventListener('click', () => {
-    const personaje = crearNuevoPersonaje();
-    if (personaje) {
-        mostrarPersonaje(personaje);
-    } else {
-        info.textContent = "Error al crear el personaje.";
-    }
-  });
-  function mostrarPersonaje(personaje) {
-    const tarjetasExistentes = document.querySelectorAll('.card');
-    tarjetasExistentes.forEach(tarjeta => tarjeta.remove());
-
-    let card = document.createElement('div');
-    card.classList.add('card');
-    card.style.width = '40rem';
+// FUNCION Q ARROJA ERRORES EN EL FORMULARIO CUANDO CREAMOS A NUEVO PERSONAJE
+function crearPersonaje() {
+  const personaje = crearNuevoPersonaje();
+  if (!personaje) {
+      Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Error al crear el personaje. Por favor, revisa tus entradas.'
+      });
+      return;
+  }
   
-    let img = document.createElement('img');
-    img.classList.add('card-img-top');
-    img.src = `./assets/${personaje.raza.toLowerCase()}.webp`;
-    img.alt = `Imagen del ${personaje.raza}`;
-    card.appendChild(img);
-  
-    let cardBody = document.createElement('div');
-    cardBody.classList.add('card-body');
-    let title = document.createElement('h5');
-    title.classList.add('card-title');
-    title.textContent = personaje.nombre;
-    cardBody.appendChild(title);
-    // ... puedes agregar más características aquí ...
-    card.appendChild(cardBody);
-  
-    let razaElement = document.createElement('p');
-    razaElement.textContent = `Raza: ${personaje.raza}`;
-    cardBody.appendChild(razaElement);
+  Swal.fire({
+      icon: 'info',
+      title: 'Información del Personaje',
+      html: personaje.obtenerCaracteristicas(),
+      showCloseButton: true, 
+      showCancelButton: true, 
+      focusConfirm: false,
+      confirmButtonText: 'Guardar',
+      cancelButtonText: 'Borrar',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {          
+          localStorage.setItem('personajeGuardado', JSON.stringify(personaje));
+          window.location.href = './pages/personaje.html'; 
+      } else if (result.dismiss === Swal.DismissReason.cancel) {          
+          Swal.fire('Borrado!', 'Tu personaje ha sido borrado.', 'error');
+      }
+    });
+}
+// AGREGAMOS IMAGENES AL PERSONAJE CARGADO EN PERSONAJE.HTML
+function establecerImagenRaza(raza) {
+  const imgElement = document.getElementById('imagenRaza');
+  let imagePath = "../assets/"; 
 
-    // Clase del juego
-    let claseElement = document.createElement('p');
-    claseElement.textContent = `Clase: ${personaje.claseJuego}`;
-    cardBody.appendChild(claseElement);
-
-    // Fuerza
-    let fuerzaElement = document.createElement('p');
-    fuerzaElement.textContent = `Fuerza: ${personaje.fuerza}`;
-    cardBody.appendChild(fuerzaElement);
-  
-    // Destreza
-    let destrezaElement = document.createElement('p');
-    destrezaElement.textContent = `Destreza: ${personaje.destreza}`;
-    cardBody.appendChild(destrezaElement);
-  
-    // Constitucion
-    let constitucionElement = document.createElement('p');
-    constitucionElement.textContent = `Constitucion: ${personaje.constitucion}`;
-    cardBody.appendChild(constitucionElement);
-  
-    // Sabiduria
-    let sabiduriaElement = document.createElement('p');
-    sabiduriaElement.textContent = `Sabiduria: ${personaje.sabiduria}`;
-    cardBody.appendChild(sabiduriaElement);
-  
-    // Inteligencia
-    let inteligenciaElement = document.createElement('p');
-    inteligenciaElement.textContent = `Inteligencia: ${personaje.inteligencia}`;
-    cardBody.appendChild(inteligenciaElement);
-  
-    // Carisma
-    let carismaElement = document.createElement('p');
-    carismaElement.textContent = `Carisma: ${personaje.carisma}`;
-    cardBody.appendChild(carismaElement);
-
-    // Puntos de vida
-    let hpElement = document.createElement('p');
-    hpElement.textContent = `Puntos de vida: ${personaje.hp}`;
-    cardBody.appendChild(hpElement);
-
-    // Velocidad
-    let velocidadElement = document.createElement('p');
-    velocidadElement.textContent = `Velocidad de movimiento: ${personaje.velocidad}`;
-    cardBody.appendChild(velocidadElement);
-
-    // Vision en oscuridad
-    let visionElement = document.createElement('p');
-    visionElement.textContent = `Vision en oscuridad: ${personaje.vision}`;
-    cardBody.appendChild(visionElement);
-
-    // Bonificador de compebonificadorCompetencia
-    let bonificadorCompetenciaElement = document.createElement('p');
-    bonificadorCompetenciaElement.textContent = `BonificadorCompetencia: ${personaje.bonificadorCompetencia}`;
-    cardBody.appendChild(bonificadorCompetenciaElement);
-    
-    // Habilidades claseas
-    let habilidadesElement = document.createElement('p');
-    habilidadesElement.textContent = `Habilidades: ${personaje.habilidades.join(", ")}`;
-    cardBody.appendChild(habilidadesElement);
-
-    let aptitudesRacialesElement = document.createElement('p');
-    aptitudesRacialesElement.textContent = `Aptitudes Raciales: ${personaje.aptitudes}`;
-    cardBody.appendChild(aptitudesRacialesElement);
-  
-    let equipamientoElement = document.createElement('p');
-    equipamientoElement.textContent = `Equipamiento Inicial: ${personaje.mostrarEquipamiento()}`;
-    cardBody.appendChild(equipamientoElement);
-
-    document.getElementById('infoPersonaje').appendChild(card);
+  switch (raza) {
+      case 'enano':
+          imagePath += "../assets/enano.webp"; 
+          break;
+      case 'elfo':
+          imagePath += "../assets/elfo.webp"; 
+          break;
+      case 'mediano':
+          imagePath += "../assets/mediano.webp"; 
+          break;
+      case 'humano':
+          imagePath += "../assets/humano.webp"; 
+          break;
+      case 'gnomo':
+          imagePath += "../assets/gnomo.webp"; 
+          break;
+      case 'semielfo':
+          imagePath += "../assets/semielfo.webp"; 
+          break;
+      case 'semiorco':
+          imagePath += "../assets/semiorco.webp"; 
+          break;
+     
   }
 
-});
+  imgElement.src = imagePath;
+}
 
+document.addEventListener('DOMContentLoaded', () => {
+  const botonCrear = document.getElementById('crearPersonajeBtn');
+  if (botonCrear) {
+    botonCrear.addEventListener('click', crearPersonaje);
+  }
+  
+  if (window.location.href.includes('personaje.html')) {
+    const personaje = JSON.parse(localStorage.getItem('personajeGuardado'));
+      
+    if (personaje) {
+      const divPersonaje = document.getElementById('infoPersonaje');
+      if (divPersonaje) {
+          divPersonaje.innerHTML = `
+          Raza: ${personaje.raza}<br>
+          Clase: ${personaje.claseJuego}<br>
+          Fuerza: ${personaje.fuerza}<br>
+          Destreza: ${personaje.destreza}<br>
+          Constitución: ${personaje.constitucion}<br>
+          Inteligencia: ${personaje.inteligencia}<br>
+          Sabiduría: ${personaje.sabiduria}<br>
+          Carisma: ${personaje.carisma}<br>
+          Velocidad: ${personaje.velocidad}<br>
+          Visión: ${personaje.vision}<br>
+          Aptitudes Raciales: ${personaje.aptitudes}<br>
+          HP: ${personaje.hp}<br>
+          Bonificador de Competencia: ${personaje.bonificadorCompetencia}<br>
+          Equipamiento: ${personaje.equipamiento.join(", ")}<br>
+          Habilidades: ${personaje.habilidades.join(", ")}<br>
+          `;
+          establecerImagenRaza(personaje.raza);
+      }
+    } else {
+      Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No se encontró un personaje guardado.'
+      });
+    }
+  }
+});
