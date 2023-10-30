@@ -1,11 +1,11 @@
-
-
+/* INDEX.HTML */
 #formPersonaje {
     display: flex;
     flex-direction: column;
     gap: 1rem;
     width: 25rem;
-    background-color: rgba(255, 255, 255, 0.7); /* Añade transparencia al fondo blanco */
+    background-color: rgba(255, 255, 255, 0.7);
+    /* Añade transparencia al fondo blanco */
 }
 
 .descripForm {
@@ -17,12 +17,12 @@ input {
     padding: 5px;
     border: 1px solid #ddd;
     border-radius: 4px;
-    background-color: rgba(255, 255, 255, 0.7); 
+    background-color: rgba(255, 255, 255, 0.7);
 }
 
 button {
     padding: 6px 10px;
-    background-color: rgba(0, 123, 255, 0.7); 
+    background-color: rgba(0, 123, 255, 0.7);
     color: white;
     border: none;
     border-radius: 4px;
@@ -30,22 +30,46 @@ button {
 }
 
 button:hover {
-    background-color: rgba(0, 86, 179, 0.7); 
+    background-color: rgba(0, 86, 179, 0.7);
 }
 
-.indexBody{
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+select {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.indexBody {
     background-color: #04FFE8;
     background-image: url('../assets/fondo_index_dado.jpg');
     background-attachment: fixed;
     background-size: cover;
 }
 
-.fondo{
-    background: rgba(2,0,36, 0.7);
-    background: linear-gradient(90deg, rgba(2,0,36,0.9) 0%, rgba(189,249,247,0.9) 0%, rgba(209,168,226,0.9) 50%, rgba(179,177,244,0.9) 100%);
+.fondo {
+    background: rgba(2, 0, 36, 0.7);
+    background: linear-gradient(90deg, rgba(2, 0, 36, 0.9) 0%, rgba(189, 249, 247, 0.9) 0%, rgba(209, 168, 226, 0.9) 50%, rgba(179, 177, 244, 0.9) 100%);
 }
 
-.tabla{
+.tabla {
     background-image: linear-gradient(to top, rgba(172, 203, 238, 0.9), rgba(231, 240, 253, 0.9));
 }
 
+/* PERSONAJE.HTML */
+.bodyPersonaje{
+    background-image: url('../assets/fondo_personaje.jpg'); 
+}
+.card{
+    background-color: rgba(164, 215, 254, 0.9);
+    font-size: 1.4rem;
+    font-weight: bold;
+    
+}
