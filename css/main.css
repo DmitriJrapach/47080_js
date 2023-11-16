@@ -64,12 +64,7 @@ select {
 }
 
 /* PERSONAJE.HTML */
-/* .bodyPersonaje{
-    background-image: url('../assets/fondo_personaje.jpg'); 
+
+.bodyPersonaje {
+    background-color: aquamarine;
 }
-.card{
-    background-color: rgba(164, 215, 254, 0.9);
-    font-size: 1.4rem;
-    font-weight: bold;
-    
-} */
