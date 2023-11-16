@@ -20,6 +20,7 @@ class Personaje {
     obtenerCaracteristicas() {
         return `Raza: ${this.raza},
       Clase: ${this.claseJuego},
+      Nivel: ${this.nivel},
       Fuerza: ${this.fuerza},
       Destreza: ${this.destreza},
       Constitucion: ${this.constitucion},

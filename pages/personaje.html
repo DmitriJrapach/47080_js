@@ -29,27 +29,84 @@
     </nav>
   </header>
   <main>
-    <h3>Personaje Creado</h3>
-    <div class="container mt-5">
-      <div class="card">
-        <div class="row g-0">
-          <div class="col-md-4">
-            <img id="imagenRaza" src="../assets/" alt="Imagen de raza" class="img-fluid">            
-          </div>
-          <div class="col-md-8">
-            <div class="card-body">
-              <h5 class="card-title">Detalles del Personaje</h5>
-              <div id="infoPersonaje"></div>
+    <h3 class="container mt-5">Personaje Creado</h3>
+        <div class="container mt-5">   
+            <div  >
+                <img id="imagenRaza" src="../assets/" alt="Imagen de raza" class="img-fluid">
             </div>
-          </div>
+             
+            <div>
+                <h4>Hoja de Personaje</h4>
+                <div id="infoPersonaje" class="form-control border-success">
+                  <table class="table table-bordered">
+                    <tbody>
+                      <tr>
+                        <td>Raza:</td>
+                        <td id="raza"></td>
+                      </tr>
+                      <tr>
+                        <td>Clase:</td>
+                        <td id="clase"></td>
+                      </tr>
+                      <tr>
+                        <td>Nivel:</td>
+                        <td id="nivel"></td>
+                        <td><button id="subirNivelBtn">Subir de Nivel</button>
+                          <button id="bajarNivelBtn">Bajar de Nivel</button></td>
+                      </tr>
+                      <tr>
+                        <td>Rasgos de Clase:</td>
+                        <td id="rasgosClase"></td>
+                      </tr>
+                      <tr>
+                        <td>Características:</td>
+                        <td id="caracteristicas"></td>
+                      </tr>
+                      <tr>
+                        <td>HP:</td>
+                        <td id="hp"></td>
+                      </tr>
+                      <tr>
+                        <td>Velocidad:</td>
+                        <td id="velocidad"></td>
+                      </tr>
+                      <tr>
+                        <td>Visión en oscuridad:</td>
+                        <td id="vision"></td>
+                      </tr>
+                      <tr>
+                        <td>Aptitudes Raciales:</td>
+                        <td id="aptitudes"></td>
+                      </tr>
+                      <tr>
+                        <td>Bonificador de Competencia:</td>
+                        <td id="bonificadorCompetencia"></td>
+                      </tr>
+                      <tr>
+                        <td>Equipamiento:</td>
+                        <td id="equipamiento"></td>
+                      </tr>
+                      <tr>
+                        <td>Habilidades:</td>
+                        <td id="habilidades"></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                            
+                </div>
+            </div>            
         </div>
-      </div>
-    </div>
+        
   </main>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
     crossorigin="anonymous"></script>
   <script src="../js/funcionesComunes.js"></script>
   <script src="../js/mostrarPersonaje.js"></script>
+  <script type="module" src="../js/clases/barbaro.js"></script>
+  <script type="module" src="../js/clases/bardo.js"></script>
+  
+  
+  <script type="module" src="../js/clases/subidaNivel.js"></script>
 </body>
 </html>
